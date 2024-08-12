@@ -1,0 +1,19 @@
+--------------------------------- PROJECT DOCUMENTATION ------------------------------------
+--------------------------------------------------------------------------------------------
+
+NOTES 
+- Correct scoping of variables within project. 'let' and 'var' keywords need to be used correctly.
+- Class constructors used correctly with methods enclosed.
+- Promises used to ensure correct order of operations.
+
+STRUCTURE
+
+Main server.js node program
+    Calls modules below
+        - date.js (used for timestamping)
+        - system.js (used for gaining system status)
+        - objects.js (used for defining reuseable objects and classes)
+        - devices { used for IO connected device definitions
+                    - transmitters.js (used for 4-20mA / 1.5v scaled devices)
+                    - discrete.js (used for digital devices)
+                  }
