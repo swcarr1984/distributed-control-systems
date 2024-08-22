@@ -35,9 +35,10 @@ function myDB() {
                     console.log('Database created');
                 }
             })
+
             */
+           /*
             // Once created the below lines of code are redundant
-            
             var ioTable2 = "CREATE TABLE client1iodata (tag VARCHAR(255), value VARCHAR(255), servertime VARCHAR(255),clienttime VARCHAR(255))";
             connection.query(ioTable2, function (err, result) {
                 if(err) {
@@ -56,16 +57,53 @@ function myDB() {
                     console.log('Table created')
                 }
             })
-                
+            var sysTable1 = "CREATE TABLE client1sysdata (tag VARCHAR(255), value VARCHAR(255), clienttime VARCHAR(255))";
+            connection.query(sysTable1, function (err, result) {
+                if(err) {
+                    console.log(err);
+                }
+                else {
+                    console.log('Table created')
+                }
+            })
+            var sysTable2 = "CREATE TABLE client2sysdata (tag VARCHAR(255), value VARCHAR(255), clienttime VARCHAR(255))";
+            connection.query(sysTable2, function (err, result) {
+                if(err) {
+                    console.log(err);
+                }
+                else {
+                    console.log('Table created')
+                }
+            })
+            var sysTable3 = "CREATE TABLE serversysdata (tag VARCHAR(255), value VARCHAR(255), clienttime VARCHAR(255))";
+            connection.query(sysTable3, function (err, result) {
+                if(err) {
+                    console.log(err);
+                }
+                else {
+                    console.log('Table created')
+                }
+            })
+                */
+            var alarmTable = "CREATE TABLE alarmdata (tag VARCHAR(255), status VARCHAR(255), clienttime VARCHAR(255), clientnumber VARCHAR(255))";
+            connection.query(alarmTable, function (err, result) {
+                if(err) {
+                    console.log(err);
+                }
+                else {
+                    console.log('Table created')
+                }
+            })
+             
+                       
         }
         
     });
     return(connection);
 };
 
-// function for writing IO data freom clients in database
+// function for writing IO data from clients into database
 function ioToDB (connection, tableName, tags, values, servertime, datetime) {
-    //console.log('datetime is:',tags,values,datetime);
     datetime = JSON.stringify(datetime);
     for( j=0; j<tags.length; j++) {
         let db = "INSERT INTO " + tableName + " (tag, value, servertime, clienttime) VALUES("+ tags[j] +","+ values[j] +", "+ servertime +","+ datetime +")";
@@ -73,11 +111,40 @@ function ioToDB (connection, tableName, tags, values, servertime, datetime) {
             if(err) throw err;
         })
     }
-    console.log('Updated client data inserted');  
+    console.log('Updated client I/O data inserted');  
+    
+};
+
+// function for writing alarm data from clients into database
+function alarmToDB (connection, tableName, tags, values, datetime, clientID) {
+    datetime = JSON.stringify(datetime);
+    clientID = JSON.stringify(clientID);
+    for( j=0; j<tags.length; j++) {
+        let db = "INSERT INTO " + tableName + " (tag, status, clienttime, clientnumber) VALUES("+ tags[j] +","+ values[j] +","+ datetime +","+ clientID +")";
+        connection.query(db, function(err, result) {
+            if(err) throw err;
+        })
+    }
+    console.log('Updated client alarm data inserted');  
+    
+};
+
+// function for writing system info data from server and clients in database
+function sysInfoToDB (connection, tableName, tags, values, datetime) {
+    datetime = JSON.stringify(datetime);
+    for( j=0; j<tags.length; j++) {
+        let db = "INSERT INTO " + tableName + " (tag, value, clienttime) VALUES("+ tags[j] +","+ values[j] +","+ datetime +")";
+        connection.query(db, function(err, result) {
+            if(err) throw err;
+        })
+    }
+    console.log('Updated system data inserted');  
     
 };
 
 module.exports = {
     myDB,
-    ioToDB
+    ioToDB,
+    alarmToDB,
+    sysInfoToDB
 };

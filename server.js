@@ -1,42 +1,55 @@
-// https://github.com/websockets/ws Use this website for more documentation
+// Main Central Server Node/Express Application on Pi Five
 
-// find out difference between ws.on( open/connected/broadcast/ individual messages/manual heartbeat )
-
-// Main Central Server on Pi Five
+// Imports express for use within the node application
 const express = require('express');
+// Creates the application
 const app = express();
-const path = require('path');
-const WebSocket = require('ws');
+// Creates a HTTP server instance for use with websocket upgrade and displays etc
 const server = require('http').createServer(app);
+// Imported path library for use with system directories as required
+const path = require('path');
+// Imports javascript websocket library
+const WebSocket = require('ws');
+// Body parser for parsing form data between application states
 const bodyParser = require('body-parser');
 // Import time functions from the date.js module
 const currentTime = require('./date.js');
 // Import watchdog functions from the watchdog.js module
 const wd = require('./watchdog.js');
+// Import system Information
+const sysInfo = require('./system.js');
+// Import format IO write to DB function from serverFormatdata.js module
+const format = require('./devices/serverFormatdata.js');
 // Import websockets functions from the socket.js module
 const wskt = require('./serverSocket.js');
 // Import mysql database function from the database.js module
 const db = require('./database.js');
-// Used for allowing urlencoding within the app
-app.use(bodyParser.urlencoded({extended: false}));
 // The below command tells express that EJS is the Template Engine of choice for Project
 app.set('view engine', 'ejs');
-// Import various class definitions from from the objects.js module
-const objects = require('./objects.js');
 
+//--------------- Main HMI - MVC imports ---------------//
+// Set route handler constants for routing app / data to HMTL HMI screens
+const hmiroutes = require('./routes/hmi.js');
+const errorController = require('./controllers/error.js');
+// Used for allowing url encoding within the app
+app.use(bodyParser.urlencoded({extended: false}));
+// Below is used to direct app to the static public directory for serving images/css etc to page requests
 app.use(express.static(path.join(__dirname, '/public')));
+// Below commands run the route handlers set above 
+app.use(hmiroutes);
+app.use(errorController.get404);
+//----------------------------------------------------//
 
 // Globally scoped variable definitions 
-// These are used in a setInterval but need to be global so are declared here
-let dateTime;
-let GMT;
+// These are used in a setInterval but need to be global
+var dateTime;
 
 // This runs the timeStamp function imported from date.js to display current time within server.js
-// Takes the current time every 500ms
+// Takes the current time every 100ms
 setInterval (function() {
     let dateTimeGMT = currentTime.timeStamp();
     dateTime = dateTimeGMT[0].toString();
-    GMT = dateTimeGMT[1].toString();
+    //GMT = dateTimeGMT[1].toString(); // GMT used as required
 },100)
 
 //************** Below section for functions relating to WS operation **************//
@@ -55,15 +68,11 @@ server.listen(3000, /*'192.168.0.4',*/ () => {
 })
 
 // mySQL Database connection
-db.myDB();
+const sqlConn = db.myDB();
 
-// System Information logging data while running
-/*setInterval(() => {
-    console.log('Server running and time is: ', dateTime)
-}, 5000);
-*/
-
-// add reconnection and test for watchdog
-// add client id's and auth
-// add buffer and max message size per transmit
-// add timestamp to data going both ways
+// Logs system info into DB every 10 seconds
+setInterval (function() {
+    let sysData = sysInfo.createsysMap();
+    let formattedData = format.formatDBdata(sysData);
+    db.sysInfoToDB (sqlConn, 'serversysdata', formattedData.keyArray, formattedData.valueArray, dateTime);
+},10000)

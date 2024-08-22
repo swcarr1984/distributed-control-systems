@@ -39,7 +39,6 @@ function serverCommsWatchdogTimeout(socket, clientID) {
     let ID = Number(clientID);
     console.log('Client name is:', clientName);
     commsTimer[ID] = setInterval(() => {
-        //commsTimer = setInterval(() => {
         console.error(clientName, 'Comms Watchdog Timer Elapsed, Comms Error');
         socket.terminate();
         // ws.connect again
@@ -53,12 +52,10 @@ function serverCommsWatchdogRefresh(clientID) {
     dateTime = dateTimeGMT[0].toString();
     console.log(clientName, 'Comms Watchdog reset at time: ', dateTime);  // method to check if watchdog reset running in terminal
     clearInterval(commsTimer[ID]);
-    //clearInterval(commsTimer);
-    //serverCommsWatchdogTimeout(socket, clientID);
 };
 
-// Sends a numerical index '1' every 4000mS to the server.
-// If no new values comms have issue so allow timeout to close connection
+// Sends a char flag 'wdrun' every 4000mS to the server.
+// If not rcvd by server ws msg, comms have issue so allow timeout to close connection
 function clientCommsWatchdogUpdate(WDflag, socket, clientNumber) {
     if (WDflag == true) {
         let sendMsg = JSON.stringify({ type: 'wdrun', clientID:clientNumber});

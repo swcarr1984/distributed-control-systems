@@ -17,3 +17,5 @@ Main server.js node program
                     - transmitters.js (used for 4-20mA / 1.5v scaled devices)
                     - discrete.js (used for digital devices)
                   }
+
+The server will automatically reconnect clients if they drop out however same needs to be fixed for client end.

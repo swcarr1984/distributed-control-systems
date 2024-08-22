@@ -17,25 +17,29 @@ const wskt = require('./clientSocket.js');
 const sysInfo = require('./system.js');
 //**********************************************************************//
 
+//const start = performance.now();
+//const end = performance.now();
+//console.log(`Time taken to execute the websocket function is ${end - start}ms.`);
+
 // Globally scoped variable definitions 
 // These are used in a setInterval but need to be global so are declared here
 var dateTime;
 
 // This runs the timeStamp function imported from date.js to display current time within server.js
-// Takes the current time every 500ms
+// Takes the current time every 100ms
 setInterval (function() {
     let dateTimeGMT = currentTime.timeStamp();
     dateTime = dateTimeGMT[0].toString();
-    //GMT = dateTimeGMT[1].toString();
 },100)
 
 // Display system Info to the console
-let systemInformation = sysInfo.systemInfo();
+let systemInformation = sysInfo.displaySystemInfo();
 
 // Connect to the WS piFive server here
 var clientNumber = '1'
 console.log('Starting WS now');
 const socket = new WebSocket('ws://localhost:3000');
+// The updated client IO data function is passed into the socket when called
 const clientSocket = wskt.wsServer(socket, clientNumber, c1data.updateIO);
 
 setInterval(() => {

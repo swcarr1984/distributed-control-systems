@@ -6,6 +6,11 @@ function ioDevice(tag, raw) {
     this.raw = raw;
 }
 
+function LL_Alarm(tag, raw) {
+    this.tag = tag;
+    this.raw = raw;
+}
+
 module.exports = {
     ioDevice,
 };
