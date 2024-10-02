@@ -1,14 +1,19 @@
 // Function for formatting JSON data prior to writing to database
-function formatDBdata (data) {
-    let parseddata = JSON.parse(data)
+function formatDBdata (ioData) {
+    //console.log('iodata input as JSON is:',ioData)
+    let parsedIOdata = JSON.parse(ioData)
     var keyArray = [];
     var valueArray = [];
-    Object.keys(parseddata).forEach(key => {
+    Object.keys(parsedIOdata).forEach(key => {
+        //console.log('key', key);  
         keyArray.push(JSON.stringify(key));    
     });
-    Object.values(parseddata).forEach(value => { 
+    Object.values(parsedIOdata).forEach(value => {
+        //console.log('value', value);  
         valueArray.push(JSON.stringify(value)); 
     });
+    //console.log(typeof keyArray,keyArray);
+    //console.log(valueArray);
     return{keyArray, valueArray};
 };
 

@@ -16,6 +16,8 @@ const initVar = (function () {
         return count, ioVar1, ioVar2, ioVar3, ioVar4, ai1Voltage }
 })();
 
+var aiDevice1;
+
 // Updates IO created in the above function for recording 'simulated' values in Database.
 /* When runnning properly on units the internals of this function will pull the IO interface data
 // to send and function is used within clientSocket.js */
@@ -45,7 +47,7 @@ function updateIO() {
     let ioData4 = new digitalIO.ioDevice('XI-1004', ioVar4);
 
     // Creates analog device (object) using class constructor
-    const aiDevice1 = new analogIO.aiDevice('PIT-210', ai1Voltage, 0, 2000, 'kpa', 300, 0, 0, 0, 4000, 0, 0, 0, 5, 0);
+    aiDevice1 = new analogIO.aiDevice('PIT-210', ai1Voltage, 0, 2000, 'kpa', 300, 0, 0, 0, 4000, 0, 0, 0, 5, 0);
     // Returns Scaled PV for sending to Database in above scan, scanAnalog not required here therefore
  
     // Create a new data map of the discrete and analog IO TAG and Values for database
@@ -91,5 +93,7 @@ function updateIO() {
 };
 
 module.exports = {
-    updateIO // used within client/1/2.js
+    updateIO, // used within client/1/2.js
+    aiDevice1
+    
 };

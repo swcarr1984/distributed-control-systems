@@ -14,5 +14,3 @@ function LL_Alarm(tag, raw) {
 module.exports = {
     ioDevice,
 };
-
-
