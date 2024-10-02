@@ -9,23 +9,19 @@ const format = require('./devices/serverFormatdata.js');
 // Import time functions from the date.js module
 const currentTime = require('./date.js');
 
-//let commsTimer = wd.commsTimer;
-var ws, wss;
-// Assign the sql connection to a constant
-const sqlConn = sqlDB.myDB();
-
+var wss;
 var serverTime;
 
-function wsServer(ws, wss) {
+function wsServer(wss) {
     
-    wss.on('connection', function connection(ws, wss) {
+    wss.on('connection', function connection(wss) {
 
         // Below code always executed when new connection established
-        wd.serverWatchdogInitiate(ws); 
+        wd.serverWatchdogInitiate(wss); 
         console.info('New Client connected');
             
         // Listen for messages
-        ws.addEventListener('message', function (e){msg(e)}) //('message', function (e) { //msg(e)});
+        wss.addEventListener('message', function (e){msg(e)}) //('message', function (e) { //msg(e)});
 
         function msg(e) {
             let messageData = JSON.parse(e.data);
@@ -34,7 +30,7 @@ function wsServer(ws, wss) {
             if (messageData.type === 'wdinit') {
                 let clientID = messageData.clientID; 
                 //*********** Watchdog Timer runs here ************//
-                wd.serverCommsWatchdogTimeout(ws, clientID);
+                wd.serverCommsWatchdogTimeout(wss, clientID);
             }
             // If msg data type is for Watchdog Run
             else if (messageData.type === 'wdrun') { 
@@ -51,22 +47,17 @@ function wsServer(ws, wss) {
                 // Check which client and write to according mySQL table
                 if (messageData.clientID === '1') {
                     //let formattedData = format.formatDBdata(messageData.data);
-                    sqlDB.ioToDB(sqlConn, 'client1iodata', formattedData.keyArray, formattedData.valueArray, serverTime, messageData.time);
+                    sqlDB.ioToDB('client1iodata', formattedData.keyArray, formattedData.valueArray, serverTime, messageData.time);
                 }
                 else if (messageData.clientID === '2') {
                     //let formattedData = format.formatDBdata(messageData.data);
-                    sqlDB.ioToDB(sqlConn, 'client2iodata', formattedData.keyArray, formattedData.valueArray, serverTime, messageData.time);
+                    sqlDB.ioToDB('client2iodata', formattedData.keyArray, formattedData.valueArray, serverTime, messageData.time);
                 }
             }
             // If msg data type is for Alarm Management
             else if (messageData.type === 'alarm') { 
                 let formattedData = format.formatDBdata(messageData.data);
-                //if (messageData.clientID === '1') {
-                sqlDB.alarmToDB(sqlConn, 'alarmdata', formattedData.keyArray, formattedData.valueArray, messageData.time, messageData.clientID);
-                //}
-                //else if (messageData.clientID === '2') {
-                //    sqlDB.alarmToDB(sqlConn, 'alarmdata', formattedData.keyArray, formattedData.valueArray, messageData.time, messageData.clientID);
-                //}
+                sqlDB.alarmToDB('alarmdata', formattedData.keyArray, formattedData.valueArray, messageData.time, messageData.clientID);
             }
             // If msg data type is for System Information Logging
             else if (messageData.type === 'sys') { 
@@ -75,11 +66,11 @@ function wsServer(ws, wss) {
 
                 if (messageData.clientID === '1') {
                     console.log(clientID, 'Client system message : ', messageData);
-                    sqlDB.sysInfoToDB (sqlConn, 'client1sysdata', formattedData.keyArray, formattedData.valueArray, messageData.time);
+                    sqlDB.sysInfoToDB ('client1sysdata', formattedData.keyArray, formattedData.valueArray, messageData.time);
                 }
                 else if (messageData.clientID === '2') {
                     console.log(clientID, 'Client system message : ', messageData);
-                    sqlDB.sysInfoToDB (sqlConn, 'client2sysdata', formattedData.keyArray, formattedData.valueArray, messageData.time);
+                    sqlDB.sysInfoToDB ('client2sysdata', formattedData.keyArray, formattedData.valueArray, messageData.time);
                 }  
             }
             // If msg data type is for any other non-specified types
@@ -88,7 +79,7 @@ function wsServer(ws, wss) {
             }    
         }
         
-        ws.on('close', function(event) {
+        wss.on('close', function(event) {
             if (event.wasClean) {
                 console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
                 } else {
@@ -98,7 +89,7 @@ function wsServer(ws, wss) {
           
         });
 
-        ws.on('error', function(event) {
+        wss.on('error', function(event) {
             console.log('error with WS connection')
             // can add error logs to DB if reqd
         });

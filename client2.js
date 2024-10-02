@@ -34,9 +34,9 @@ let systemInformation = sysInfo.displaySystemInfo();
 // Connect to the WS piFive server here
 var clientNumber = '2'
 console.log('Starting WS now');
-const socket = new WebSocket('ws://localhost:3000');
-// The updated client IO data function is passed into the socket when called
-const clientSocket = wskt.wsServer(socket, clientNumber, c2data.updateIO);
+// The below code connects to pi five on network, use commented code if local device testing only
+const socket = new WebSocket( 'ws://192.168.0.4:3000' /* 'ws://localhost:3000' */ );
+const clientSocket = wskt.wsClient(socket, clientNumber, c2data.updateIO);
 
 setInterval(() => {
     console.log('Client running and time is: ', dateTime);

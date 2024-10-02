@@ -42,7 +42,7 @@ function serverCommsWatchdogTimeout(socket, clientID) {
         console.error(clientName, 'Comms Watchdog Timer Elapsed, Comms Error');
         socket.terminate();
         // ws.connect again
-    }, 6000)};
+    }, 500)};
 
 // Stops the watchdog interval timer and starts again 
 function serverCommsWatchdogRefresh(clientID) {
@@ -70,7 +70,7 @@ function clientCommsWatchdogUpdate(WDflag, socket, clientNumber) {
 }; 
 
 //function serverCommsWatchdogSend(sentValue, lastValue, socket, dateTime) { setInterval(() => serverCommsWatchdogUpdate(sentValue, lastValue, socket, dateTime), 4000)};     // returns new values to client instantly
-function clientCommsWatchdogSend(WDflag, socket, clientNumber) { setInterval(() => clientCommsWatchdogUpdate(WDflag, socket, clientNumber), 4000)};    // Polls for new data every 500mS and returns to server
+function clientCommsWatchdogSend(WDflag, socket, clientNumber) { setInterval(() => clientCommsWatchdogUpdate(WDflag, socket, clientNumber), 500)};    // Polls for new data every 500mS and returns to server
 
 module.exports = {
     watchdogTimer,
