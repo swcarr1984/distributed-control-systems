@@ -13,10 +13,6 @@ function displaySystemInfo() {
     console.log("This is a: " + os.platform() + " system");
     let freeMemory = os.freemem() / 1024 / 1024; // 1024/1024 converts to MB
     console.log("Available free memory:", freeMemory.toFixed(2), "MB");
-    let cpuCores = os.cpus().length;
-    console.log("The number of CPU cores is:", cpuCores);
-    let hostname = os.hostname();
-    console.log("Hostname is:", hostname); 
     // Calling process.cpuUsage() method 
     let usage = process.cpuUsage(); 
     // Printing returned value 
