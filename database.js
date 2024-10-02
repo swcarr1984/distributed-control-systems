@@ -1,7 +1,5 @@
 // Database logic for export to the main node Pi Five Server
 
-// Taken from W3schools tutorial
-
 // For DB creation run the code with server.js once to create the DB then null the NOTE #1 code
 // and activate the NOTE #2 code which points to the created DB and allows operations etc.
 
