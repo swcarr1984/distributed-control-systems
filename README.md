@@ -1,5 +1,5 @@
 # Thesis
-Software programs for UniSQ Dissertation - Node / Websockets studies 
+Software programs for UniSQ Dissertation - Node / Websockets studies. 
 
 Commit of main programs on 12/08/2024 included working:
 - Watchdog for system and individual clients to server.
@@ -10,3 +10,5 @@ Commit of main programs on 12/08/2024 included working:
 - Database storage of IO data and timestamping
 
 Next is HMI integration capable of using live or DB data.
+
+Final commit of Operating test code for Server and Clients on 02/10/2024.
