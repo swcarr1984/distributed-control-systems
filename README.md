@@ -78,9 +78,7 @@ Express MVC Backend
                 ▼
 WebSocket Server  <──>  HMI Frontend (HTML/CSS/JS)
 
-'''
-
-'''markdown
+```
 
 ### Hardware & OS ###
 - Raspberry Pi Zero W
@@ -112,6 +110,7 @@ WebSocket Server  <──>  HMI Frontend (HTML/CSS/JS)
 - Alarm indicators
 - System state visualisation
 
+```text
 ###Repository Structure
 Code
 /src
@@ -127,6 +126,7 @@ Code
    /js
 /hardware
 /docs
+```
 
 ### Research Outcomes ###
 This project demonstrates that:
