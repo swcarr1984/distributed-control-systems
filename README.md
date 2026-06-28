@@ -111,8 +111,8 @@ WebSocket Server  <──>  HMI Frontend (HTML/CSS/JS)
 - System state visualisation
 
 ```text
-###Repository Structure
-Code
+Repository Structure
+
 /src
    /controllers
    /models
@@ -129,7 +129,7 @@ Code
 ```
 
 ### Research Outcomes ###
-This project demonstrates that:
+This project demonstrated that:
 - Modern web technologies can be adapted for real‑time industrial control
 - Sub‑millisecond capture is achievable on low‑power embedded Linux devices
 - Dual‑client architectures improve reliability and determinism
