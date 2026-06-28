@@ -1,0 +1,25 @@
+<%- include('../includes/head.ejs') %>
+
+<body class="body">
+    <main>
+        <h1 class="header_1">Main HMI Test / Landing Page</h1>
+        <div>
+        <article>
+            <header class="header_1">
+                <h1 class="title"><%= devs.tag %></h1>
+            </header>
+            <div>
+                <img class="image" src="/images/mockPT.png" alt="<%= devs.tag %>">
+            </div>
+            <div>
+                <h2 class="header_2"><%= devs.PV %></h2>
+                <p class="description"><%= devs.description %></p>
+            </div>
+        </article>            
+        </div>
+        </main>
+        
+      
+
+<%- include('../includes/end.ejs') %>
+
